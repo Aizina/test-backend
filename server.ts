@@ -12,7 +12,11 @@ app.use(express.json());
 
 app.use("/api/users", userRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+if (!PORT) {
+  throw new Error("PORT environment variable is not set. Railway requires it.");
+}
+
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/sidebarDB";
 
 mongoose.connect(MONGODB_URI)
