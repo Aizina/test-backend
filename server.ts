@@ -10,18 +10,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Routes
 app.use("/api/users", userRoutes);
 
-const PORT = process.env.PORT;
-if (!PORT) {
-  throw new Error("PORT environment variable is not set. Railway requires it.");
+// Railway injects PORT automatically in production.
+// Default to 3000 for local development.
+const PORT = Number(process.env.PORT) || 3000;
+
+// You must define this in Railway Variables → MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  throw new Error("❌ MONGODB_URI is not set in environment variables");
 }
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-mongoose.connect(MONGODB_URI)
+mongoose
+  .connect(MONGODB_URI)
   .then(() => {
-    console.log("MongoDB connected");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    console.log("✅ MongoDB connected");
+    app.listen(PORT, "0.0.0.0", () =>
+      console.log(`🚀 Server running on port ${PORT}`)
+    );
   })
-  .catch(err => console.error(err));
+  .catch((err) => {
+    console.error("❌ Database connection failed:", err);
+    process.exit(1);
+  });
