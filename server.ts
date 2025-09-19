@@ -17,7 +17,7 @@ if (!PORT) {
   throw new Error("PORT environment variable is not set. Railway requires it.");
 }
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/sidebarDB";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
