@@ -10,11 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use("/api/users", userRoutes);
+app.get("/", (req, res) => {
+  res.json({ message: "API is alive 🚀" });
+});
 
-// Railway injects PORT automatically in production.
-// Default to 3000 for local development.
 const PORT = Number(process.env.PORT) || 3000;
 
 // You must define this in Railway Variables → MONGODB_URI
